@@ -1,0 +1,229 @@
+USE [master]
+GO
+/****** Object:  Database [hospital4]    Script Date: 31/03/2026 00:21:33 ******/
+CREATE DATABASE [hospital4]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'hospital4', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.MSSQLSERVER\MSSQL\DATA\hospital4.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'hospital4_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.MSSQLSERVER\MSSQL\DATA\hospital4_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [hospital4] SET COMPATIBILITY_LEVEL = 170
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [hospital4].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [hospital4] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [hospital4] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [hospital4] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [hospital4] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [hospital4] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [hospital4] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [hospital4] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [hospital4] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [hospital4] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [hospital4] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [hospital4] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [hospital4] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [hospital4] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [hospital4] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [hospital4] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [hospital4] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [hospital4] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [hospital4] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [hospital4] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [hospital4] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [hospital4] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [hospital4] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [hospital4] SET RECOVERY FULL 
+GO
+ALTER DATABASE [hospital4] SET  MULTI_USER 
+GO
+ALTER DATABASE [hospital4] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [hospital4] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [hospital4] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [hospital4] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [hospital4] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [hospital4] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [hospital4] SET OPTIMIZED_LOCKING = OFF 
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'hospital4', N'ON'
+GO
+ALTER DATABASE [hospital4] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [hospital4] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [hospital4]
+GO
+/****** Object:  Table [dbo].[Appointments]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Appointments](
+	[AppointmentID] [int] NOT NULL,
+	[PatientID] [int] NOT NULL,
+	[DoctorID] [int] NOT NULL,
+	[AppointmentDateTime] [datetime] NULL,
+	[Status] [nvarchar](50) NULL,
+	[Notes] [nvarchar](200) NULL,
+ CONSTRAINT [PK_Appointments] PRIMARY KEY CLUSTERED 
+(
+	[AppointmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Billing]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Billing](
+	[BillID] [int] NOT NULL,
+	[TreatmentID] [int] NOT NULL,
+	[PatientID] [int] NOT NULL,
+	[BillDate] [datetime] NULL,
+	[Amount] [decimal](10, 2) NULL,
+	[PaymentMethod] [nvarchar](50) NULL,
+	[PaymentStatus] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Billing] PRIMARY KEY CLUSTERED 
+(
+	[BillID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Departments]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Departments](
+	[DepartmentID] [int] NOT NULL,
+	[DepartmentName] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Departments] PRIMARY KEY CLUSTERED 
+(
+	[DepartmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Doctors]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Doctors](
+	[DoctorID] [int] NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[LastName] [nvarchar](100) NOT NULL,
+	[Specialization] [nvarchar](100) NULL,
+	[Phone] [nvarchar](20) NULL,
+	[YearsExperience] [int] NULL,
+	[HospitalBranch] [nvarchar](100) NULL,
+	[Email] [nvarchar](100) NULL,
+ CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED 
+(
+	[DoctorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Patients]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Patients](
+	[PatientID] [int] NOT NULL,
+	[FirstName] [nvarchar](100) NOT NULL,
+	[LastName] [nvarchar](100) NOT NULL,
+	[BirthDate] [date] NULL,
+	[Gender] [char](1) NULL,
+	[Phone] [nvarchar](20) NULL,
+	[Address] [nvarchar](200) NULL,
+	[RegistrationDate] [date] NULL,
+	[InsuranceProvider] [nvarchar](100) NULL,
+	[InsuranceNumber] [nvarchar](50) NULL,
+	[Email] [nvarchar](100) NULL,
+ CONSTRAINT [PK_Patients] PRIMARY KEY CLUSTERED 
+(
+	[PatientID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Treatments]    Script Date: 31/03/2026 00:21:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Treatments](
+	[TreatmentID] [int] NOT NULL,
+	[AppointmentID] [int] NOT NULL,
+	[TreatmentType] [nvarchar](100) NULL,
+	[Description] [nvarchar](200) NULL,
+	[Cost] [decimal](10, 2) NULL,
+	[TreatmentDate] [datetime] NULL,
+ CONSTRAINT [PK_Treatments] PRIMARY KEY CLUSTERED 
+(
+	[TreatmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Appointments]  WITH CHECK ADD  CONSTRAINT [FK_Appointments_Doctors] FOREIGN KEY([DoctorID])
+REFERENCES [dbo].[Doctors] ([DoctorID])
+GO
+ALTER TABLE [dbo].[Appointments] CHECK CONSTRAINT [FK_Appointments_Doctors]
+GO
+ALTER TABLE [dbo].[Appointments]  WITH CHECK ADD  CONSTRAINT [FK_Appointments_Patients] FOREIGN KEY([PatientID])
+REFERENCES [dbo].[Patients] ([PatientID])
+GO
+ALTER TABLE [dbo].[Appointments] CHECK CONSTRAINT [FK_Appointments_Patients]
+GO
+ALTER TABLE [dbo].[Billing]  WITH CHECK ADD  CONSTRAINT [FK_Billing_Patients] FOREIGN KEY([PatientID])
+REFERENCES [dbo].[Patients] ([PatientID])
+GO
+ALTER TABLE [dbo].[Billing] CHECK CONSTRAINT [FK_Billing_Patients]
+GO
+ALTER TABLE [dbo].[Billing]  WITH CHECK ADD  CONSTRAINT [FK_Billing_Treatments] FOREIGN KEY([TreatmentID])
+REFERENCES [dbo].[Treatments] ([TreatmentID])
+GO
+ALTER TABLE [dbo].[Billing] CHECK CONSTRAINT [FK_Billing_Treatments]
+GO
+ALTER TABLE [dbo].[Treatments]  WITH CHECK ADD  CONSTRAINT [FK_Treatments_Appointments] FOREIGN KEY([AppointmentID])
+REFERENCES [dbo].[Appointments] ([AppointmentID])
+GO
+ALTER TABLE [dbo].[Treatments] CHECK CONSTRAINT [FK_Treatments_Appointments]
+GO
+USE [master]
+GO
+ALTER DATABASE [hospital4] SET  READ_WRITE 
+GO
